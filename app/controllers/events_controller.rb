@@ -1,5 +1,7 @@
 class EventsController < ApplicationController
-  before_action :set_event, only: %i[ show edit update destroy ]
+  include CanCan::ControllerAdditions
+  before_action :authenticate_user!, :set_event, only: %i[ show edit update destroy ]
+  load_and_authorize_resource
 
   # GET /events or /events.json
   def index
