@@ -6,4 +6,6 @@ class User < ApplicationRecord
 
   # A user can be either an organizer or a participant       
   enum role: {organizer: 0, participant: 1}
+
+  has_many :events, -> { where(role: 'organizer') }, class_name: 'Event', foreign_key: 'user'
 end
