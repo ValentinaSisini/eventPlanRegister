@@ -8,4 +8,7 @@ class User < ApplicationRecord
   enum role: {organizer: 0, participant: 1}
 
   has_many :events, -> { where(role: 'organizer') }, class_name: 'Event', foreign_key: 'user'
+  has_many :participations
+  has_many :registered_events, through: :participations, source: :event
+
 end
