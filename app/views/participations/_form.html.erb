@@ -11,14 +11,9 @@
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :user_id, style: "display: block" %>
-    <%= form.text_field :user_id %>
-  </div>
-
-  <div>
-    <%= form.label :event_id, style: "display: block" %>
-    <%= form.text_field :event_id %>
+  <div class="field">
+    <%= form.label :event_id %>
+    <%= form.collection_select(:event_id, @events, :id, :name, prompt: 'Select an event') %>
   </div>
 
   <div>

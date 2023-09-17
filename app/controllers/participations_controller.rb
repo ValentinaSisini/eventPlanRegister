@@ -1,27 +1,38 @@
 class ParticipationsController < ApplicationController
-  before_action :set_participation, only: %i[ show edit update destroy ]
+  include CanCan::ControllerAdditions
+  before_action :authenticate_user!, :set_participation, only: %i[ show edit update destroy ]
+  load_and_authorize_resource
+
 
   # GET /participations or /participations.json
   def index
-    @participations = Participation.all
+    #@participations = Participation.all
+    @participations = Participation.where(user_id: current_user.id).includes(:event, :user)
   end
 
   # GET /participations/1 or /participations/1.json
   def show
+    @events = Event.all # Ottiene tutti gli eventi disponibili
   end
 
   # GET /participations/new
   def new
     @participation = Participation.new
+    @events = Event.all # Ottiene tutti gli eventi disponibili
   end
 
   # GET /participations/1/edit
   def edit
+    @events = Event.all # Ottiene tutti gli eventi disponibili
   end
 
   # POST /participations or /participations.json
   def create
     @participation = Participation.new(participation_params)
+
+    @participation.user = current_user # Imposta l'utente corrente come assegnatoario della prenotazione
+
+    @events = Event.all # Ottiene tutti gli eventi disponibili
 
     respond_to do |format|
       if @participation.save

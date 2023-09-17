@@ -3,13 +3,21 @@ class Ability
 
   def initialize(user)
 
-    return unless user.present?
-    # chiunque loggato può visualizzare gli eventi
-    can :read, Event
+    user ||= User.new 
 
-    return unless user.organizer?
-    # solo gli organizatori possono gestire gli eventi (ognuno solo i suoi)
-    can :manage, Event, user:user
+    if user.organizer? 
+      # solo gli organizatori possono gestire gli eventi (ognuno solo i suoi)
+      can :manage, Event, user:user
+
+    elsif user.participant? 
+      # i partecipanti possono vedere tutti gli eveti
+      can :read, Event
+      # i partecipanti possono gestire ognono le proprie prenotazioni ad eventi
+      can :manage, Participation, user:user
+
+    else
+      cannot :read, [Event, Participation]
+    end
 
   end
 end
