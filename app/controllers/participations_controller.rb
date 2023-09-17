@@ -6,8 +6,11 @@ class ParticipationsController < ApplicationController
 
   # GET /participations or /participations.json
   def index
-    #@participations = Participation.all
-    @participations = Participation.where(user_id: current_user.id).includes(:event, :user)
+    if current_user.organizer?
+      @participations = Participation.joins(:event).where(events: { user_id: current_user.id }).includes(:event, :user)
+    else
+      @participations = Participation.where(user_id: current_user.id).includes(:event, :user)
+    end
   end
 
   # GET /participations/1 or /participations/1.json
