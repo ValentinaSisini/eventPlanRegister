@@ -14,4 +14,15 @@ class ApplicationController < ActionController::Base
     redirect_to root_path
   end
 
+  # Aggiunta del menu
+  helper_method :menu_options
+
+  def menu_options
+    [
+      { name: 'Home', path: '/' },
+      { name: 'Events', path: '/events' },
+      { name: 'Partecipations', path: '/participations' }
+    ]
+  end
+
 end

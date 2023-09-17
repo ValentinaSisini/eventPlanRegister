@@ -11,6 +11,15 @@
   </head>
 
   <body>
+  <!-- Menu -->
+  <nav>
+    <ul>
+      <% menu_options.each do |option| %>
+        <li><%= link_to option[:name], option[:path] %></li>
+      <% end %>
+    </ul>
+  </nav>
+
     <p class="notice"><%= notice %></p> 
     <p class="alert"><%= alert %></p>
     <%= yield %>
