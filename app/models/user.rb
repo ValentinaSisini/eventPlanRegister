@@ -10,5 +10,6 @@ class User < ApplicationRecord
   has_many :events, -> { where(role: 'organizer') }, class_name: 'Event', foreign_key: 'user'
   has_many :participations
   has_many :registered_events, through: :participations, source: :event
+  has_many :notifications
 
 end

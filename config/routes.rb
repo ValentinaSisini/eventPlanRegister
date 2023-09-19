@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :notifications
   resources :participations
   resources :events
   devise_for :users

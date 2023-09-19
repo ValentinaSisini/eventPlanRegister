@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_17_131936) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_19_154522) do
   create_table "events", force: :cascade do |t|
     t.integer "user_id", null: false
     t.string "name", limit: 255
@@ -23,6 +23,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_17_131936) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_events_on_user_id"
+  end
+
+  create_table "notifications", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "event_id", null: false
+    t.text "message"
+    t.datetime "datetime"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["event_id"], name: "index_notifications_on_event_id"
+    t.index ["user_id"], name: "index_notifications_on_user_id"
   end
 
   create_table "participations", force: :cascade do |t|
@@ -48,6 +59,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_17_131936) do
   end
 
   add_foreign_key "events", "users"
+  add_foreign_key "notifications", "events"
+  add_foreign_key "notifications", "users"
   add_foreign_key "participations", "events"
   add_foreign_key "participations", "users"
 end

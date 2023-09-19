@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  event: one
+  message: MyText
+  datetime: 2023-09-19 17:45:22
+
+two:
+  user: two
+  event: two
+  message: MyText
+  datetime: 2023-09-19 17:45:22

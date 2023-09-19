@@ -6,20 +6,24 @@ class Ability
     user ||= User.new 
 
     if user.organizer? 
-      # solo gli organizatori possono gestire gli eventi (ognuno solo i suoi)
+      # Solo gli organizzatori possono gestire gli eventi (ognuno solo i suoi)
       can :manage, Event, user:user
-
       # Gli organizzatori possono vedere e cancellare le partecipazioni relative agli eventi da loro organizzati
       can [:read, :destroy], Participation, event: { user_id: user.id }
+      # Gli organizzatori possono vedere solo le loro notifiche
+      can :read, Notification, user:user
+      # 
 
     elsif user.participant? 
-      # i partecipanti possono vedere tutti gli eveti
+      # I partecipanti possono vedere tutti gli eveti
       can :read, Event
-      # i partecipanti possono gestire ognono le proprie prenotazioni ad eventi
+      # I partecipanti possono gestire ognono le proprie prenotazioni ad eventi
       can :manage, Participation, user:user
+      # I partecipanti possono vedere solo le loro notifiche
+      can :read, Notification, user:user
 
     else
-      cannot :read, [Event, Participation]
+      cannot :read, [Event, Participation, Notification]
     end
 
   end

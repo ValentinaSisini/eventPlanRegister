@@ -21,7 +21,8 @@ class ApplicationController < ActionController::Base
     [
       { name: 'Home', path: '/' },
       { name: 'Events', path: '/events' },
-      { name: 'Partecipations', path: '/participations' }
+      { name: 'Partecipations', path: '/participations' },
+      { name: 'Notifications', path: '/notifications' }
     ]
   end
 
