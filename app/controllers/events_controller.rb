@@ -6,6 +6,30 @@ class EventsController < ApplicationController
   # GET /events or /events.json
   def index
     @events = Event.all
+
+    # Applica i filtri se sono stati forniti
+    if params[:name].present?
+      @events = @events.where("name LIKE ?", "%#{params[:name]}%")
+    end
+
+    if params[:start_datetime].present?
+      @events = @events.where("start_datetime >= ?", params[:start_datetime])
+    end
+
+    if params[:latitude].present?
+      @events = @events.where("latitude = ?", params[:latitude])
+    end
+
+    if params[:longitude].present?
+      @events = @events.where("longitude = ?", params[:longitude])
+    end
+
+    # Ordina gli eventi per data di inzio
+    @events = @events.order(start_datetime: :asc)
+
+    # Mostra gli eventi nella vista
+    render :index
+
   end
 
   # GET /events/1 or /events/1.json

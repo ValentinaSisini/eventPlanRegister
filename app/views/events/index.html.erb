@@ -2,6 +2,33 @@
 
 <h1>Events</h1>
 
+<!-- Form di Ricerca -->
+<h2>Search for the event by specifying your preferences</h2>
+<%= form_with(url: events_path, method: "get") do |form| %>
+  <div class="field">
+    <%= form.label :name, "Event name" %>
+    <%= form.text_field :name %>
+  </div>
+  <div class="field">
+    <%= form.label :start_datetime, "Start datetime" %>
+    <%= form.date_field :start_datetime %>
+  </div>
+  <div class="field">
+    <%= form.label :latitude, "Latitude" %>
+    <%= form.text_field :latitude %>
+  </div>
+  <div class="field">
+    <%= form.label :longitude, "Longitude" %>
+    <%= form.text_field :longitude %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit "Cerca" %>
+  </div>
+<% end %>
+
+<!-- Elenco Eventi -->
+<h2>Results</h2>
 <div id="events">
   <% @events.each do |event| %>
     <%= render event %>
