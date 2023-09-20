@@ -32,16 +32,47 @@ class ParticipationsController < ApplicationController
   # POST /participations or /participations.json
   def create
     @participation = Participation.new(participation_params)
-
-    @participation.user = current_user # Imposta l'utente corrente come assegnatoario della prenotazione
+    @participation.user = current_user # Imposta l'utente corrente come assegnatario della prenotazione
+    @event = @participation.event # ricava l'evento associato alla partecipazione
 
     @events = Event.all # Ottiene tutti gli eventi disponibili
 
     respond_to do |format|
-      if @participation.save
-        format.html { redirect_to participation_url(@participation), notice: "Participation was successfully created." }
-        format.json { render :show, status: :created, location: @participation }
+      # 0 - Se l'evento non è stato specificato:
+      # Restituisce errore
+      if !@event.present? 
+        @participation.errors.add(:base, "Please select an event.")
+        format.html { render :new, status: :unprocessable_entity }
+        format.json { render json: @participation.errors, status: :unprocessable_entity }
+      # 1 - Se l'aggiunta della nuova partecipazione NON PROVOCA il raggiungimento della campienza massima:
+      # Salva normalmente la nuova partecipazione
+      elsif @event.participations.count < (@event.max_participants - 1)
+        if @participation.save
+          format.html { redirect_to participation_url(@participation), notice: "Participation was successfully created." }
+          format.json { render :show, status: :created, location: @participation }
+        else
+          format.html { render :new, status: :unprocessable_entity }
+          format.json { render json: @participation.errors, status: :unprocessable_entity }
+        end
+      
+      # 2 - Altrimenti, se l'aggiunta della nuova partecipazione PROVOCA il raggiungimento della campienza massima:
+      # Salva la nuova partecipazione E INVIA LA NOTIFICA ALL'ORGANIZZATORE
+      elsif @event.participations.count == (@event.max_participants - 1)
+        if @participation.save
+          format.html { redirect_to participation_url(@participation), notice: "Participation was successfully created." }
+          format.json { render :show, status: :created, location: @participation }
+          # Invia notifica all'organizzatore
+          message = "The event #{@event.name} has reached the maximum number of participants."
+          Notification.create(user: @event.user, event: @event, message: message, datetime: Time.now)
+        else
+          format.html { render :new, status: :unprocessable_entity }
+          format.json { render json: @participation.errors, status: :unprocessable_entity }
+        end
+      
+      # 3 - Altrimenti, se la quota massima E' GIA' STATA RAGGIUNTA
+      # Blocca il salvataggio della nuova partecipazione
       else
+        @participation.errors.add(:base, "The event has reached its maximum capacity.")
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @participation.errors, status: :unprocessable_entity }
       end
