@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_19_154522) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_20_151504) do
   create_table "events", force: :cascade do |t|
     t.integer "user_id", null: false
     t.string "name", limit: 255
@@ -27,7 +27,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_19_154522) do
 
   create_table "notifications", force: :cascade do |t|
     t.integer "user_id", null: false
-    t.integer "event_id", null: false
+    t.integer "event_id"
     t.text "message"
     t.datetime "datetime"
     t.datetime "created_at", null: false
@@ -59,8 +59,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_19_154522) do
   end
 
   add_foreign_key "events", "users"
-  add_foreign_key "notifications", "events"
-  add_foreign_key "notifications", "users"
-  add_foreign_key "participations", "events"
-  add_foreign_key "participations", "users"
+  add_foreign_key "notifications", "events", on_delete: :nullify
+  add_foreign_key "notifications", "users", on_delete: :cascade
+  add_foreign_key "participations", "events", on_delete: :cascade
+  add_foreign_key "participations", "users", on_delete: :cascade
 end

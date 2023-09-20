@@ -12,6 +12,14 @@
 
   <body>
   <!-- Menu -->
+
+  <% if user_signed_in? %> 
+  <span> Welcome <b><%= current_user.email %></b> </span> 
+    <%= button_to "Sign out", destroy_user_session_path, method: :delete %> 
+  <% else %>
+    <%= button_to "Sign in", new_user_session_path %> 
+  <% end %>
+
   <nav>
     <ul>
       <% menu_options.each do |option| %>

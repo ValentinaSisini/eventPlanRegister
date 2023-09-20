@@ -66,6 +66,13 @@ class EventsController < ApplicationController
   def update
     respond_to do |format|
       if @event.update(event_params)
+
+        # Notifica a tutti i partecipanti all'evento
+        message = "The event #{@event.name} has been modified."
+        @event.participants.each do |participant|
+          Notification.create(user: participant, event: @event, message: message, datetime: Time.now)
+        end
+
         format.html { redirect_to event_url(@event), notice: "Event was successfully updated." }
         format.json { render :show, status: :ok, location: @event }
       else
@@ -77,6 +84,14 @@ class EventsController < ApplicationController
 
   # DELETE /events/1 or /events/1.json
   def destroy
+
+    # Notifica a tutti i partecipanti all'evento
+    # Va inviata prima dell'effettiva cancellazione dell'evento
+    message = "The event #{@event.name} has been canceled."
+    @event.participants.each do |participant|
+      Notification.create(user: participant, event: @event, message: message, datetime: Time.now)
+    end
+
     @event.destroy
 
     respond_to do |format|

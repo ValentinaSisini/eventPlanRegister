@@ -1,9 +1,2 @@
 <h1>Welcome to EventPlanRegister</h1>
 <p>the platform where you can organize events and register to participate in the events of your choice</p>
-
-<% if user_signed_in? %> 
- <div> User: <%= current_user.email %> </div> 
-  <%= button_to "Sign out", destroy_user_session_path, method: :delete %> 
-<% else %>
-  <%= button_to "Sign in", new_user_session_path %> 
-<% end %>

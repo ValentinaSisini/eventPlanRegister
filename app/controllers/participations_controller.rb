@@ -65,6 +65,10 @@ class ParticipationsController < ApplicationController
   def destroy
     @participation.destroy
 
+    # Notifica al partecipante che è stato rimosso dall'evento
+    message = "Your participation in the event #{@participation.event.name} has been canceled."
+      Notification.create(user: @participation.user, event: @participation.event, message: message, datetime: Time.now)
+
     respond_to do |format|
       format.html { redirect_to participations_url, notice: "Participation was successfully destroyed." }
       format.json { head :no_content }
