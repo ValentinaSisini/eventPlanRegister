@@ -1,24 +1,18 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Requisiti di sistema
+* Sistema operativo Linux-based (testato su Ubuntu)
+* Ruby 3.0.6p216
+* Ruby-dev
+* Sqlite3
+* Node.js
+* Yarn
+## Gemme
+* Rails 7.0.7
+* Devise
+* Cancancan
+## Download del repository
+* git clone https://github.com/ValentinaSisini/eventPlanRegister.git
+## Creazione delle tabelle in DB
+* rails db:migrate
 
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
